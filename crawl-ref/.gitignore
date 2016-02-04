@@ -215,3 +215,7 @@ icon.png
 /source/util/monster/monster
 /source/util/monster/vault_monster_data.h
 /source/util/monster/*.d
+
+# generated files for json-data
+/source/util/json-data/json-data
+/source/util/json-data/*.d

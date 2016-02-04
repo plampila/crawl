@@ -82,7 +82,8 @@ MAKEFLAGS += -rR # This only works for recursive makes, i.e. contribs ...
 
 .PHONY: all test install clean clean-contrib clean-rltiles clean-android \
         distclean debug debug-lite profile package-source source \
-        build-windows package-windows docs greet api android FORCE monster
+        build-windows package-windows docs greet api android FORCE monster \
+        json-data
 
 include Makefile.obj
 
@@ -1256,6 +1257,7 @@ endif
 
 GAME_OBJS=$(OBJECTS) main.o $(EXTRA_OBJECTS)
 MONSTER_OBJS=$(OBJECTS) util/monster/monster-main.o $(EXTRA_OBJECTS)
+JSON_DATA_OBJS=$(OBJECTS) util/json-data/json-data-main.o $(EXTRA_OBJECTS)
 
 # There might not have been any goals passed on the commandline, so...
 GOALS = $(or $(MAKECMDGOALS),$(.DEFAULT_GOAL))
@@ -1501,7 +1503,7 @@ ifeq ($(USE_DGAMELAUNCH),)
 	$(CHMOD) $(MCHMOD) $(prefix_fp)/$(bin_prefix)/$(GAME) || true
 endif
 
-clean: clean-rltiles clean-webserver clean-android clean-monster
+clean: clean-rltiles clean-webserver clean-android clean-monster clean-json-data
 	+$(MAKE) -C $(UTIL) clean
 	$(RM) $(GAME) $(GAME).exe $(GENERATED_FILES) $(EXTRA_OBJECTS) libw32c.o\
 	    libunix.o $(ALL_OBJECTS) $(ALL_OBJECTS:.o=.d) *.ixx  \
@@ -1552,6 +1554,18 @@ install-monster: monster
 	if [ -f ~/source/announcements.log ]; then \
 	  echo 'Monster database of master branch on crawl.develz.org updated to: $(VERSION)' >>~/source/announcements.log;\
 	fi
+
+util/json-data/json-data: $(JSON_DATA_OBJS) $(CONTRIB_LIBS) dat/dlua/tags.lua
+	+$(QUIET_LINK)$(CXX) $(LDFLAGS) $(JSON_DATA_OBJS) -o $@ $(LIBS)
+
+json-data: util/json-data/json-data
+
+test-json-data: json-data
+	util/json-data/json-data
+
+clean-json-data:
+	$(RM) util/json-data/json-data
+
 debug: all
 debug-lite: all
 profile: all
