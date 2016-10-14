@@ -213,7 +213,8 @@ bool actor::gourmand(bool calc_unid, bool items) const
 bool actor::res_corr(bool calc_unid, bool items) const
 {
     return items && (wearing(EQ_RINGS, RING_RESIST_CORROSION, calc_unid)
-                     || scan_artefacts(ARTP_RCORR, calc_unid));
+                     || scan_artefacts(ARTP_RCORR, calc_unid)
+                     || res_acid() > 0);
 }
 
 // This is a bit confusing. This is not the function that determines whether or

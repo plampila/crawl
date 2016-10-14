@@ -1546,6 +1546,17 @@ bool player::res_corr(bool calc_unid, bool items) const
 
 int player_res_acid(bool calc_unid, bool items)
 {
+    if (items)
+    {
+        // body armour:
+        const item_def *body_armour = you.slot_item(EQ_BODY_ARMOUR);
+        if (body_armour
+            && armour_type_prop(body_armour->sub_type, ARMF_RES_ACID))
+        {
+                return true;
+        }
+    }
+
     return you.res_corr(calc_unid, items) ? 1 : 0;
 }
 

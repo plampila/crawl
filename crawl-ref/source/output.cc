@@ -2365,7 +2365,7 @@ static vector<formatted_string> _get_overview_resistances(
     const int relec = player_res_electricity(calc_unid);
     out += _resist_composer("rElec", cwidth, relec) + "\n";
 
-    const int rcorr = you.res_corr(calc_unid);
+    const int rcorr = player_res_acid(calc_unid);
     out += _resist_composer("rCorr", cwidth, rcorr) + "\n";
 
     const int rmuta = (you.rmut_from_item(calc_unid)
