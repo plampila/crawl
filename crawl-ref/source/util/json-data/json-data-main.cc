@@ -125,9 +125,12 @@ static JsonNode *_spell_books(spell_type spell)
     for (int i = 0; i < NUM_FIXED_BOOKS; ++i)
     {
         const book_type book = static_cast<book_type>(i);
-        vector<spell_type> list = spellbook_template(book);
-        if (std::find(list.begin(), list.end(), spell) != list.end())
-            json_append_member(obj, _book_name(book), json_mkbool(true));
+        if (!item_type_removed(OBJ_BOOKS, book))
+        {
+            vector<spell_type> list = spellbook_template(book);
+            if (std::find(list.begin(), list.end(), spell) != list.end())
+                json_append_member(obj, _book_name(book), json_mkbool(true));
+        }
     }
     return obj;
 }
@@ -248,7 +251,8 @@ static JsonNode *_book_list()
     for (int i = 0; i < NUM_FIXED_BOOKS; ++i)
     {
         const book_type book = static_cast<book_type>(i);
-        json_append_member(obj, _book_name(book), _book_object(book));
+        if (!item_type_removed(OBJ_BOOKS, book))
+            json_append_member(obj, _book_name(book), _book_object(book));
     }
     return obj;
 }
